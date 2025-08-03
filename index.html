@@ -7,8 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#E8F4FD">
-    <title>Cátedra Abierta Suite - Sistema de Gestión Docente</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>CASuite || Dashboard - Sistema de Gestión Educativa</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -72,7 +71,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
@@ -99,6 +98,71 @@
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
+        }
+        
+        .header-search {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-size: 0.875rem;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--info);
+            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
+            background: var(--card-bg);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .search-result-item:hover {
+            background: var(--primary-bg);
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
         }
         
         .user-section {
@@ -135,13 +199,13 @@
         .main-content {
             flex: 1;
             padding: 2rem;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
         
-        /* Login Screen */
-        .login-container {
+        /* Login/Register Screen */
+        .auth-container {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -149,7 +213,7 @@
             padding: 2rem;
         }
         
-        .login-card {
+        .auth-card {
             background: var(--card-bg);
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-lg);
@@ -159,7 +223,7 @@
             text-align: center;
         }
         
-        .login-logo {
+        .auth-logo {
             width: 64px;
             height: 64px;
             background: linear-gradient(135deg, var(--info) 0%, var(--success) 100%);
@@ -173,17 +237,45 @@
             margin: 0 auto 2rem;
         }
         
-        .login-title {
+        .auth-title {
             font-size: 1.75rem;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
         
-        .login-subtitle {
+        .auth-subtitle {
             color: var(--text-muted);
             margin-bottom: 2rem;
             font-size: 0.95rem;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: var(--primary-bg);
+            border-radius: var(--radius-md);
+            padding: 0.25rem;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .auth-tab.active {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
         }
         
         /* Buttons */
@@ -227,18 +319,14 @@
             border-color: var(--border-medium);
         }
         
-        .btn-google {
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--border-medium);
-            width: 100%;
-            font-size: 1rem;
-            padding: 1rem;
+        .btn-danger {
+            background: var(--error);
+            color: white;
         }
         
-        .btn-google:hover {
-            background: var(--primary-bg);
-            box-shadow: var(--shadow-md);
+        .btn-danger:hover {
+            background: #E53E3E;
+            transform: translateY(-1px);
         }
         
         .btn-sm {
@@ -279,12 +367,154 @@
             padding: 1.5rem;
         }
         
+        /* Dashboard Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .dashboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        /* Calendar */
+        .calendar-widget {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+        
+        .calendar-header {
+            padding: 1rem;
+            background: var(--primary-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .calendar-nav {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s ease;
+        }
+        
+        .calendar-nav:hover {
+            background: var(--border-light);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--border-light);
+        }
+        
+        .calendar-day {
+            background: var(--card-bg);
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .calendar-day:hover {
+            background: var(--primary-bg);
+        }
+        
+        .calendar-day.today {
+            background: var(--info);
+            color: white;
+        }
+        
+        .calendar-day.other-month {
+            color: var(--text-muted);
+        }
+        
+        .calendar-day.has-event {
+            background: var(--accent-bg);
+            font-weight: 600;
+        }
+        
+        /* Tasks Widget */
+        .tasks-widget {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+        
+        .tasks-header {
+            padding: 1rem;
+            background: var(--primary-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .task-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .task-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .task-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .task-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .task-text.completed {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+        
         /* Menu Items */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
-            margin-top: 2rem;
         }
         
         .menu-item {
@@ -319,7 +549,8 @@
         .menu-icon.classrooms { background: linear-gradient(135deg, #E8F4FD 0%, #B3E5FC 100%); }
         .menu-icon.attendance { background: linear-gradient(135deg, #FFF2E8 0%, #FFE0B2 100%); }
         .menu-icon.reports { background: linear-gradient(135deg, #F0FFF4 0%, #C8E6C9 100%); }
-        .menu-icon.settings { background: linear-gradient(135deg, #FFF0F5 0%, #F8BBD9 100%); }
+        .menu-icon.exams { background: linear-gradient(135deg, #FFF0F5 0%, #F8BBD9 100%); }
+        .menu-icon.settings { background: linear-gradient(135deg, #F0F4FF 0%, #E0E7FF 100%); }
         
         .menu-title {
             font-size: 1.1rem;
@@ -385,7 +616,7 @@
             font-size: 0.875rem;
         }
         
-        .form-input {
+        .form-input, .form-select, .form-textarea {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1px solid var(--border-medium);
@@ -398,10 +629,89 @@
             min-height: 44px;
         }
         
-        .form-input:focus {
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
             border-color: var(--info);
             box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 2rem;
+        }
+        
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+        }
+        
+        .modal-content {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
         }
         
         /* Status Indicators */
@@ -491,6 +801,37 @@
             box-shadow: var(--shadow-lg);
         }
         
+        /* Date Picker */
+        .date-picker {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .date-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .date-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .date-option.selected {
+            border-color: var(--info);
+            background: rgba(99, 179, 237, 0.1);
+        }
+        
         /* Loading States */
         .loading {
             display: flex;
@@ -516,6 +857,16 @@
         }
         
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-sidebar {
+                order: -1;
+            }
+        }
+        
         @media (max-width: 768px) {
             .app-header {
                 padding: 1rem;
@@ -527,11 +878,17 @@
                 align-items: flex-start;
             }
             
+            .header-search {
+                order: 2;
+                margin: 0;
+                max-width: none;
+            }
+            
             .main-content {
                 padding: 1rem;
             }
             
-            .login-card {
+            .auth-card {
                 padding: 2rem;
                 margin: 1rem;
             }
@@ -556,6 +913,10 @@
             .table-container {
                 overflow-x: auto;
             }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 480px) {
@@ -567,6 +928,10 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.5rem;
+            }
+            
+            .date-options {
+                flex-direction: column;
             }
         }
         
@@ -607,41 +972,52 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Login Screen -->
-        <div id="loginScreen" class="login-container">
-            <div class="login-card fade-in">
-                <div class="login-logo">CA</div>
-                <h1 class="login-title">Cátedra Abierta Suite</h1>
-                <p class="login-subtitle">Sistema de Gestión Docente Moderno</p>
+        <!-- Authentication Screen -->
+        <div id="authScreen" class="auth-container">
+            <div class="auth-card fade-in">
+                <div class="auth-logo">CA</div>
+                <h1 class="auth-title">CASuite</h1>
+                <p class="auth-subtitle">Sistema de Gestión Educativa Completo</p>
                 
-                <div id="g_id_onload"
-                     data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                     data-callback="handleCredentialResponse"
-                     data-auto_prompt="false">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showLoginTab()">Iniciar Sesión</button>
+                    <button class="auth-tab" onclick="showRegisterTab()">Registrarse</button>
                 </div>
                 
-                <div id="g_id_signin" 
-                     data-type="standard"
-                     data-size="large"
-                     data-theme="outline"
-                     data-text="sign_in_with"
-                     data-shape="rectangular"
-                     data-logo_alignment="left"
-                     class="btn-google">
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <div class="form-group">
+                        <input type="text" id="loginUsername" class="form-input" placeholder="Nombre de usuario" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Contraseña" autocomplete="current-password">
+                    </div>
+                    <button class="btn btn-primary" onclick="loginUser()" style="width: 100%; margin-bottom: 1rem;">
+                        Iniciar Sesión
+                    </button>
                 </div>
                 
-                <div style="margin: 1.5rem 0; position: relative;">
-                    <div style="height: 1px; background: var(--border-light);"></div>
-                    <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--card-bg); padding: 0 1rem; color: var(--text-muted); font-size: 0.875rem;">o continúa con</span>
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <div class="form-group">
+                        <input type="text" id="registerName" class="form-input" placeholder="Nombre completo" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="registerEmail" class="form-input" placeholder="Correo electrónico" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="registerUsername" class="form-input" placeholder="Nombre de usuario" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="registerPassword" class="form-input" placeholder="Contraseña" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="registerConfirmPassword" class="form-input" placeholder="Confirmar contraseña" autocomplete="new-password">
+                    </div>
+                    <button class="btn btn-primary" onclick="registerUser()" style="width: 100%; margin-bottom: 1rem;">
+                        Crear Cuenta
+                    </button>
                 </div>
-                
-                <div class="form-group">
-                    <input type="text" id="username" class="form-input" placeholder="Nombre de usuario" autocomplete="username">
-                </div>
-                
-                <button class="btn btn-primary" onclick="loginWithUsername()" style="width: 100%; margin-bottom: 1rem;">
-                    Ingresar
-                </button>
                 
                 <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.4;">
                     Al continuar, aceptas nuestros términos de servicio y política de privacidad.
@@ -657,7 +1033,15 @@
                     <div class="logo-section">
                         <div class="logo">CA</div>
                         <div>
-                            <div class="app-title">Cátedra Abierta Suite</div>
+                            <div class="app-title" id="pageTitle">CASuite || Dashboard</div>
+                        </div>
+                    </div>
+                    
+                    <div class="header-search">
+                        <div style="position: relative;">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="search-input" id="globalSearch" placeholder="Buscar estudiante..." oninput="performGlobalSearch()">
+                            <div class="search-results" id="searchResults"></div>
                         </div>
                     </div>
                     
@@ -678,52 +1062,85 @@
                 <!-- Dashboard -->
                 <div id="dashboard">
                     <div class="fade-in">
-                        <h2 style="margin-bottom: 2rem; color: var(--text-primary);">Panel de Control</h2>
-                        
-                        <!-- Stats -->
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-value" id="totalClassrooms">0</div>
-                                <div class="stat-label">Aulas Activas</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="totalStudents">0</div>
-                                <div class="stat-label">Estudiantes</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="attendanceToday">0</div>
-                                <div class="stat-label">Asistencias Hoy</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="averageAttendance">0%</div>
-                                <div class="stat-label">Promedio Asistencia</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Menu -->
-                        <div class="menu-grid">
-                            <div class="menu-item" onclick="showClassrooms()">
-                                <div class="menu-icon classrooms">🏫</div>
-                                <div class="menu-title">Gestión de Aulas</div>
-                                <div class="menu-description">Administra aulas, estudiantes y configuraciones académicas</div>
+                        <div class="dashboard-grid">
+                            <div class="dashboard-main">
+                                <!-- Stats -->
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="totalClassrooms">0</div>
+                                        <div class="stat-label">Aulas Activas</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="totalStudents">0</div>
+                                        <div class="stat-label">Estudiantes</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="attendanceToday">0</div>
+                                        <div class="stat-label">Asistencias Hoy</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="averageAttendance">0%</div>
+                                        <div class="stat-label">Promedio Asistencia</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Menu -->
+                                <div class="menu-grid">
+                                    <div class="menu-item" onclick="showClassrooms()">
+                                        <div class="menu-icon classrooms">🏫</div>
+                                        <div class="menu-title">Gestión de Aulas</div>
+                                        <div class="menu-description">Administra aulas, estudiantes y configuraciones académicas</div>
+                                    </div>
+                                    
+                                    <div class="menu-item" onclick="showAttendance()">
+                                        <div class="menu-icon attendance">📋</div>
+                                        <div class="menu-title">Control de Asistencia</div>
+                                        <div class="menu-description">Registra y gestiona la asistencia de estudiantes</div>
+                                    </div>
+                                    
+                                    <div class="menu-item" onclick="showReports()">
+                                        <div class="menu-icon reports">📊</div>
+                                        <div class="menu-title">Informes y Reportes</div>
+                                        <div class="menu-description">Genera reportes detallados y estadísticas con IA</div>
+                                    </div>
+                                    
+                                    <div class="menu-item" onclick="showExams()">
+                                        <div class="menu-icon exams">📝</div>
+                                        <div class="menu-title">Exámenes</div>
+                                        <div class="menu-description">Crea y gestiona evaluaciones y exámenes</div>
+                                    </div>
+                                    
+                                    <div class="menu-item" onclick="showSettings()">
+                                        <div class="menu-icon settings">⚙️</div>
+                                        <div class="menu-title">Configuración</div>
+                                        <div class="menu-description">Personaliza el sistema según tus necesidades</div>
+                                    </div>
+                                </div>
                             </div>
                             
-                            <div class="menu-item" onclick="showAttendance()">
-                                <div class="menu-icon attendance">📋</div>
-                                <div class="menu-title">Control de Asistencia</div>
-                                <div class="menu-description">Registra y gestiona la asistencia de estudiantes</div>
-                            </div>
-                            
-                            <div class="menu-item" onclick="showReports()">
-                                <div class="menu-icon reports">📊</div>
-                                <div class="menu-title">Informes y Reportes</div>
-                                <div class="menu-description">Genera reportes detallados y estadísticas</div>
-                            </div>
-                            
-                            <div class="menu-item" onclick="showSettings()">
-                                <div class="menu-icon settings">⚙️</div>
-                                <div class="menu-title">Configuración</div>
-                                <div class="menu-description">Personaliza el sistema según tus necesidades</div>
+                            <div class="dashboard-sidebar">
+                                <!-- Calendar Widget -->
+                                <div class="calendar-widget">
+                                    <div class="calendar-header">
+                                        <button class="calendar-nav" onclick="previousMonth()">‹</button>
+                                        <h3 id="calendarMonth">Enero 2024</h3>
+                                        <button class="calendar-nav" onclick="nextMonth()">›</button>
+                                    </div>
+                                    <div class="calendar-grid" id="calendarGrid">
+                                        <!-- Calendar will be generated here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Tasks Widget -->
+                                <div class="tasks-widget">
+                                    <div class="tasks-header">
+                                        <h3 style="margin: 0; font-size: 1rem; color: var(--text-primary);">Tareas Pendientes</h3>
+                                        <button class="btn btn-secondary btn-sm" onclick="addTask()">+</button>
+                                    </div>
+                                    <div id="tasksList">
+                                        <!-- Tasks will be loaded here -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -733,7 +1150,7 @@
                 <div id="classroomsSection" class="hidden">
                     <div class="fade-in">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                            <h2 style="color: var(--text-primary);">Gestión de Aulas</h2>
+                            <h2 style="color: var(--text-primary);">CASuite || Gestión de Aulas</h2>
                             <div>
                                 <button class="btn btn-primary" onclick="showAddClassroom()">
                                     + Nueva Aula
@@ -755,12 +1172,15 @@
                     <div class="fade-in">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                             <div>
-                                <h2 id="classroomTitle" style="color: var(--text-primary);">Detalle del Aula</h2>
+                                <h2 id="classroomTitle" style="color: var(--text-primary);">CASuite || Detalle del Aula</h2>
                                 <p id="classroomSubtitle" style="color: var(--text-muted);"></p>
                             </div>
                             <div>
                                 <button class="btn btn-primary btn-sm" onclick="showAddStudent()">
                                     + Estudiante
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="importStudents()">
+                                    📥 Importar
                                 </button>
                                 <button class="btn btn-secondary btn-sm" onclick="showClassrooms()">
                                     Volver
@@ -797,6 +1217,7 @@
                                         <th>Estado</th>
                                         <th>Asistencia</th>
                                         <th>Promedio</th>
+                                        <th>Observaciones</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -808,11 +1229,74 @@
                     </div>
                 </div>
 
+                <!-- Student Detail -->
+                <div id="studentDetail" class="hidden">
+                    <div class="fade-in">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <div>
+                                <h2 id="studentTitle" style="color: var(--text-primary);">CASuite || Perfil del Estudiante</h2>
+                                <p id="studentSubtitle" style="color: var(--text-muted);"></p>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary btn-sm" onclick="generateStudentAIReport()">
+                                    🤖 Reporte IA
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="goBackFromStudent()">
+                                    Volver
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem;">
+                            <div>
+                                <!-- Student Info -->
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Información del Estudiante</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div id="studentInfo">
+                                            <!-- Student info will be loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Attendance History -->
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Historial de Asistencia</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div id="studentAttendanceHistory">
+                                            <!-- Attendance history will be loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <!-- Observations -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Observaciones</h3>
+                                        <button class="btn btn-primary btn-sm" onclick="addObservation()">+</button>
+                                    </div>
+                                    <div class="card-content">
+                                        <div id="studentObservations">
+                                            <!-- Observations will be loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Attendance Section -->
                 <div id="attendanceSection" class="hidden">
                     <div class="fade-in">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                            <h2 style="color: var(--text-primary);">Control de Asistencia</h2>
+                            <h2 style="color: var(--text-primary);">CASuite || Control de Asistencia</h2>
                             <button class="btn btn-secondary" onclick="showDashboard()">
                                 Volver
                             </button>
@@ -830,6 +1314,53 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Daily Attendance View -->
+                        <div id="dailyAttendanceView" class="hidden">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Asistencias del Día</h3>
+                                    <button class="btn btn-secondary btn-sm" onclick="backToAttendanceSelect()">Cambiar Aula</button>
+                                </div>
+                                <div class="card-content">
+                                    <div id="dailyAttendanceList">
+                                        <!-- Daily attendance will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date Selection for Attendance -->
+                <div id="attendanceDateSelection" class="hidden">
+                    <div class="fade-in">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <div>
+                                <h2 style="color: var(--text-primary);">CASuite || Seleccionar Fecha</h2>
+                                <p id="attendanceClassroomInfo" style="color: var(--text-muted);"></p>
+                            </div>
+                            <button class="btn btn-secondary" onclick="showAttendance()">
+                                Volver
+                            </button>
+                        </div>
+                        
+                        <div class="date-picker">
+                            <h3 style="margin-bottom: 1rem;">Seleccionar fecha para tomar asistencia:</h3>
+                            <div class="date-options">
+                                <div class="date-option selected" onclick="selectDateOption('today')">
+                                    <h4>Hoy</h4>
+                                    <p id="todayDate"></p>
+                                </div>
+                                <div class="date-option" onclick="selectDateOption('custom')">
+                                    <h4>Fecha Personalizada</h4>
+                                    <input type="date" id="customDate" class="form-input" style="margin-top: 0.5rem;">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="startAttendanceWithDate()">
+                                Continuar
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -838,7 +1369,7 @@
                     <div class="fade-in">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                             <div>
-                                <h2 style="color: var(--text-primary);">Tomando Asistencia</h2>
+                                <h2 style="color: var(--text-primary);">CASuite || Tomando Asistencia</h2>
                                 <p id="attendanceInfo" style="color: var(--text-muted);"></p>
                             </div>
                             <div>
@@ -873,7 +1404,7 @@
                 <div id="reportsSection" class="hidden">
                     <div class="fade-in">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                            <h2 style="color: var(--text-primary);">Informes y Reportes</h2>
+                            <h2 style="color: var(--text-primary);">CASuite || Informes y Reportes</h2>
                             <button class="btn btn-secondary" onclick="showDashboard()">
                                 Volver
                             </button>
@@ -897,6 +1428,71 @@
                                 <div class="menu-title">Reporte de Calificaciones</div>
                                 <div class="menu-description">Análisis de rendimiento académico</div>
                             </div>
+                            
+                            <div class="menu-item" onclick="selectStudentForAIReport()">
+                                <div class="menu-icon reports">🤖</div>
+                                <div class="menu-title">Reporte Individual IA</div>
+                                <div class="menu-description">Análisis personalizado por estudiante con IA</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exams Section -->
+                <div id="examsSection" class="hidden">
+                    <div class="fade-in">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h2 style="color: var(--text-primary);">CASuite || Exámenes</h2>
+                            <div>
+                                <button class="btn btn-primary" onclick="showAddExam()">
+                                    + Nuevo Examen
+                                </button>
+                                <button class="btn btn-secondary" onclick="showDashboard()">
+                                    Volver
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="examsList">
+                            <!-- Exams will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settingsSection" class="hidden">
+                    <div class="fade-in">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h2 style="color: var(--text-primary);">CASuite || Configuración</h2>
+                            <button class="btn btn-secondary" onclick="showDashboard()">
+                                Volver
+                            </button>
+                        </div>
+                        
+                        <div class="menu-grid">
+                            <div class="menu-item" onclick="showProfileSettings()">
+                                <div class="menu-icon settings">👤</div>
+                                <div class="menu-title">Perfil de Usuario</div>
+                                <div class="menu-description">Actualiza tu información personal</div>
+                            </div>
+                            
+                            <div class="menu-item" onclick="showSchoolSettings()">
+                                <div class="menu-icon settings">🏫</div>
+                                <div class="menu-title">Gestión de Colegios</div>
+                                <div class="menu-description">Administra la información de colegios</div>
+                            </div>
+                            
+                            <div class="menu-item" onclick="showSystemSettings()">
+                                <div class="menu-icon settings">⚙️</div>
+                                <div class="menu-title">Configuración del Sistema</div>
+                                <div class="menu-description">Personaliza la apariencia y comportamiento</div>
+                            </div>
+                            
+                            <div class="menu-item" onclick="showDataManagement()">
+                                <div class="menu-icon settings">💾</div>
+                                <div class="menu-title">Gestión de Datos</div>
+                                <div class="menu-description">Exportar, importar y respaldar información</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -904,105 +1500,138 @@
         </div>
     </div>
 
+    <!-- Modals will be inserted here dynamically -->
+    <div id="modalContainer"></div>
+
     <script>
         // Global Variables
         let currentUser = null;
         let currentUserData = null;
         let currentClassroom = null;
+        let currentStudent = null;
         let currentAttendanceSession = null;
+        let currentCalendarDate = new Date();
+        let selectedDateOption = 'today';
         
-        // Sample Data Structure (will be replaced with real data)
-        let appData = {
+        // System Data
+        let systemData = {
             users: {},
-            classrooms: [],
-            students: [],
-            attendance: {},
-            settings: {}
+            schools: [
+                { id: 1, name: 'Colegio San Martín', address: 'Av. San Martín 123', phone: '123-456-7890' },
+                { id: 2, name: 'Instituto Belgrano', address: 'Belgrano 456', phone: '098-765-4321' }
+            ],
+            subjects: ['Matemáticas', 'Lengua', 'Historia', 'Geografía', 'Ciencias Naturales', 'Inglés', 'Educación Física'],
+            quarters: ['1° Cuatrimestre', '2° Cuatrimestre', 'Anual'],
+            examTypes: ['Parcial', 'Final', 'Recuperatorio', 'Integrador', 'Oral'],
+            observationTypes: ['Comportamiento', 'Felicitaciones', 'Académico', 'Participación', 'Asistencia', 'General']
         };
 
-        // Initialize Google Sign-In
-        function initializeGoogleAuth() {
-            // This would be replaced with your actual Google Client ID
-            // For demo purposes, we'll simulate the Google auth
-            console.log('Google Auth initialized');
+        // Authentication Functions
+        function showLoginTab() {
+            document.querySelector('.auth-tab.active').classList.remove('active');
+            document.querySelectorAll('.auth-tab')[0].classList.add('active');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
         }
 
-        // Handle Google Sign-In Response
-        function handleCredentialResponse(response) {
-            try {
-                // Decode the JWT token (in real implementation)
-                const userData = parseJWT(response.credential);
-                
-                currentUser = {
-                    id: userData.sub,
-                    name: userData.name,
-                    email: userData.email,
-                    picture: userData.picture
-                };
-                
-                loginUser(currentUser);
-            } catch (error) {
-                console.error('Error handling Google sign-in:', error);
-                showError('Error al iniciar sesión con Google');
-            }
+        function showRegisterTab() {
+            document.querySelector('.auth-tab.active').classList.remove('active');
+            document.querySelectorAll('.auth-tab')[1].classList.add('active');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
         }
 
-        // Parse JWT Token (simplified version)
-        function parseJWT(token) {
-            try {
-                const base64Url = token.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                return JSON.parse(jsonPayload);
-            } catch (error) {
-                throw new Error('Invalid token');
-            }
-        }
-
-        // Username Login
-        function loginWithUsername() {
-            const username = document.getElementById('username').value.trim();
+        function registerUser() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
             
-            if (!username) {
-                showError('Por favor ingrese un nombre de usuario');
+            // Validation
+            if (!name || !email || !username || !password || !confirmPassword) {
+                showError('Por favor complete todos los campos');
                 return;
             }
             
-            // Create user object for username login
-            currentUser = {
-                id: 'user_' + username.toLowerCase(),
-                name: username,
-                email: username + '@local.system',
-                picture: null,
-                loginType: 'username'
+            if (password !== confirmPassword) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            // Check if user exists
+            const existingUsers = JSON.parse(localStorage.getItem('casuiteUsers') || '{}');
+            if (existingUsers[username]) {
+                showError('El nombre de usuario ya existe');
+                return;
+            }
+            
+            // Create user
+            const newUser = {
+                id: 'user_' + Date.now(),
+                name: name,
+                email: email,
+                username: username,
+                password: password, // In real app, this should be hashed
+                createdAt: new Date().toISOString()
             };
             
-            loginUser(currentUser);
+            // Save user
+            existingUsers[username] = newUser;
+            localStorage.setItem('casuiteUsers', JSON.stringify(existingUsers));
+            
+            showSuccess('Usuario registrado exitosamente');
+            
+            // Auto login
+            currentUser = newUser;
+            initializeUserSession();
         }
 
-        // Login User
-        function loginUser(user) {
-            currentUser = user;
+        function loginUser() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
             
-            // Load or create user data
-            loadUserData(user.id);
+            if (!username || !password) {
+                showError('Por favor ingrese usuario y contraseña');
+                return;
+            }
+            
+            // Check credentials
+            const existingUsers = JSON.parse(localStorage.getItem('casuiteUsers') || '{}');
+            const user = existingUsers[username];
+            
+            if (!user || user.password !== password) {
+                showError('Usuario o contraseña incorrectos');
+                return;
+            }
+            
+            currentUser = user;
+            initializeUserSession();
+        }
+
+        function initializeUserSession() {
+            // Load user data
+            loadUserData(currentUser.id);
             
             // Update UI
             updateUserInterface();
             
             // Show main app
-            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
             
             // Initialize dashboard
             showDashboard();
             
-            console.log('User logged in:', user);
+            console.log('User logged in:', currentUser);
         }
 
-        // Load User Data
+        // Data Management Functions
         function loadUserData(userId) {
             const savedData = localStorage.getItem(`casuiteData_${userId}`);
             
@@ -1016,59 +1645,20 @@
             } else {
                 currentUserData = createDefaultUserData();
             }
-            
-            // Merge with app data
-            appData = { ...appData, ...currentUserData };
         }
 
-        // Create Default User Data
         function createDefaultUserData() {
             return {
-                classrooms: [
-                    {
-                        id: 1,
-                        name: '1°A',
-                        school: 'Colegio San Martín',
-                        shift: 'Mañana',
-                        classroomCode: 'abc123',
-                        classroomLink: 'https://classroom.google.com/c/abc123'
-                    },
-                    {
-                        id: 2,
-                        name: '2°B',
-                        school: 'Instituto Belgrano',
-                        shift: 'Tarde',
-                        classroomCode: 'def456',
-                        classroomLink: 'https://classroom.google.com/c/def456'
-                    }
-                ],
-                students: [
-                    {
-                        id: 1,
-                        name: 'Juan',
-                        lastName: 'Pérez',
-                        classroomId: 1,
-                        isRepeater: false,
-                        average: 8.5
-                    },
-                    {
-                        id: 2,
-                        name: 'María',
-                        lastName: 'García',
-                        classroomId: 1,
-                        isRepeater: false,
-                        average: 9.2
-                    },
-                    {
-                        id: 3,
-                        name: 'Carlos',
-                        lastName: 'Rodríguez',
-                        classroomId: 2,
-                        isRepeater: true,
-                        average: 6.8
-                    }
-                ],
+                classrooms: [],
+                students: [],
                 attendance: {},
+                observations: {},
+                exams: [],
+                tasks: [
+                    { id: 1, text: 'Revisar exámenes pendientes', completed: false, date: new Date().toISOString().split('T')[0] },
+                    { id: 2, text: 'Preparar material para próxima clase', completed: false, date: new Date().toISOString().split('T')[0] }
+                ],
+                calendarEvents: {},
                 settings: {
                     theme: 'light',
                     language: 'es',
@@ -1077,19 +1667,11 @@
             };
         }
 
-        // Save User Data
         function saveUserData() {
             if (!currentUser) return;
             
             try {
-                const dataToSave = {
-                    classrooms: appData.classrooms,
-                    students: appData.students,
-                    attendance: appData.attendance,
-                    settings: appData.settings
-                };
-                
-                localStorage.setItem(`casuiteData_${currentUser.id}`, JSON.stringify(dataToSave));
+                localStorage.setItem(`casuiteData_${currentUser.id}`, JSON.stringify(currentUserData));
                 console.log('User data saved successfully');
             } catch (error) {
                 console.error('Error saving user data:', error);
@@ -1097,54 +1679,83 @@
             }
         }
 
-        // Update User Interface
+        // UI Update Functions
         function updateUserInterface() {
             if (!currentUser) return;
             
-            // Update user info in header
             document.getElementById('currentUser').textContent = currentUser.name;
-            
-            // Update user avatar
             const avatar = document.getElementById('userAvatar');
-            if (currentUser.picture) {
-                avatar.innerHTML = `<img src="${currentUser.picture}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%;">`;
-            } else {
-                avatar.textContent = currentUser.name.charAt(0).toUpperCase();
-            }
+            avatar.textContent = currentUser.name.charAt(0).toUpperCase();
+        }
+
+        function updatePageTitle(title) {
+            document.getElementById('pageTitle').textContent = title;
+            document.title = title;
         }
 
         // Navigation Functions
         function showDashboard() {
             hideAllSections();
             document.getElementById('dashboard').classList.remove('hidden');
+            updatePageTitle('CASuite || Dashboard');
             updateDashboardStats();
+            loadCalendar();
+            loadTasks();
         }
 
         function showClassrooms() {
             hideAllSections();
             document.getElementById('classroomsSection').classList.remove('hidden');
+            updatePageTitle('CASuite || Gestión de Aulas');
             loadClassroomsList();
         }
 
         function showClassroomDetail(classroomId) {
             hideAllSections();
             document.getElementById('classroomDetail').classList.remove('hidden');
+            updatePageTitle('CASuite || Detalle del Aula');
             loadClassroomDetail(classroomId);
+        }
+
+        function showStudentDetail(studentId) {
+            hideAllSections();
+            document.getElementById('studentDetail').classList.remove('hidden');
+            updatePageTitle('CASuite || Perfil del Estudiante');
+            loadStudentDetail(studentId);
         }
 
         function showAttendance() {
             hideAllSections();
             document.getElementById('attendanceSection').classList.remove('hidden');
+            updatePageTitle('CASuite || Control de Asistencia');
             loadAttendanceClassrooms();
         }
 
         function showReports() {
             hideAllSections();
             document.getElementById('reportsSection').classList.remove('hidden');
+            updatePageTitle('CASuite || Informes y Reportes');
+        }
+
+        function showExams() {
+            hideAllSections();
+            document.getElementById('examsSection').classList.remove('hidden');
+            updatePageTitle('CASuite || Exámenes');
+            loadExamsList();
+        }
+
+        function showSettings() {
+            hideAllSections();
+            document.getElementById('settingsSection').classList.remove('hidden');
+            updatePageTitle('CASuite || Configuración');
         }
 
         function hideAllSections() {
-            const sections = ['dashboard', 'classroomsSection', 'classroomDetail', 'attendanceSection', 'individualAttendance', 'reportsSection'];
+            const sections = [
+                'dashboard', 'classroomsSection', 'classroomDetail', 'studentDetail',
+                'attendanceSection', 'attendanceDateSelection', 'individualAttendance',
+                'dailyAttendanceView', 'reportsSection', 'examsSection', 'settingsSection'
+            ];
             sections.forEach(section => {
                 document.getElementById(section).classList.add('hidden');
             });
@@ -1152,8 +1763,8 @@
 
         // Dashboard Functions
         function updateDashboardStats() {
-            const totalClassrooms = appData.classrooms.length;
-            const totalStudents = appData.students.length;
+            const totalClassrooms = currentUserData.classrooms.length;
+            const totalStudents = currentUserData.students.length;
             const attendanceToday = calculateTodayAttendance();
             const averageAttendance = calculateAverageAttendance();
             
@@ -1167,7 +1778,7 @@
             const today = new Date().toISOString().split('T')[0];
             let count = 0;
             
-            Object.values(appData.attendance).forEach(studentAttendance => {
+            Object.values(currentUserData.attendance).forEach(studentAttendance => {
                 if (studentAttendance[today] === 'P' || studentAttendance[today] === 'T') {
                     count++;
                 }
@@ -1177,12 +1788,12 @@
         }
 
         function calculateAverageAttendance() {
-            if (appData.students.length === 0) return 0;
+            if (currentUserData.students.length === 0) return 0;
             
             let totalPercentage = 0;
             let studentsWithAttendance = 0;
             
-            appData.students.forEach(student => {
+            currentUserData.students.forEach(student => {
                 const percentage = calculateStudentAttendancePercentage(student.id);
                 if (percentage > 0) {
                     totalPercentage += percentage;
@@ -1194,7 +1805,7 @@
         }
 
         function calculateStudentAttendancePercentage(studentId) {
-            const studentAttendance = appData.attendance[studentId];
+            const studentAttendance = currentUserData.attendance[studentId];
             if (!studentAttendance) return 0;
             
             const records = Object.values(studentAttendance);
@@ -1204,12 +1815,197 @@
             return Math.round((presentCount / records.length) * 100);
         }
 
-        // Classrooms Functions
+        // Calendar Functions
+        function loadCalendar() {
+            const monthNames = [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
+            
+            const dayNames = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+            
+            document.getElementById('calendarMonth').textContent = 
+                `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getFullYear()}`;
+            
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            // Add day headers
+            dayNames.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day';
+                dayHeader.style.fontWeight = '600';
+                dayHeader.style.background = 'var(--primary-bg)';
+                dayHeader.textContent = day;
+                grid.appendChild(dayHeader);
+            });
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), 1);
+            const lastDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            // Generate calendar days
+            for (let i = 0; i < 42; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = date.getDate();
+                
+                if (date.getMonth() !== currentCalendarDate.getMonth()) {
+                    dayElement.classList.add('other-month');
+                }
+                
+                if (date.toDateString() === new Date().toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                const dateStr = date.toISOString().split('T')[0];
+                if (currentUserData.calendarEvents[dateStr]) {
+                    dayElement.classList.add('has-event');
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+
+        function previousMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            loadCalendar();
+        }
+
+        function nextMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            loadCalendar();
+        }
+
+        // Tasks Functions
+        function loadTasks() {
+            const container = document.getElementById('tasksList');
+            container.innerHTML = '';
+            
+            if (currentUserData.tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="task-item">
+                        <span style="color: var(--text-muted); font-style: italic;">No hay tareas pendientes</span>
+                    </div>
+                `;
+                return;
+            }
+            
+            currentUserData.tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task-item';
+                taskElement.innerHTML = `
+                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${task.id})"></div>
+                    <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
+                `;
+                container.appendChild(taskElement);
+            });
+        }
+
+        function toggleTask(taskId) {
+            const task = currentUserData.tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                saveUserData();
+                loadTasks();
+            }
+        }
+
+        function addTask() {
+            const text = prompt('Ingrese la nueva tarea:');
+            if (text && text.trim()) {
+                const newTask = {
+                    id: Date.now(),
+                    text: text.trim(),
+                    completed: false,
+                    date: new Date().toISOString().split('T')[0]
+                };
+                currentUserData.tasks.push(newTask);
+                saveUserData();
+                loadTasks();
+            }
+        }
+
+        // Global Search Functions
+        function performGlobalSearch() {
+            const query = document.getElementById('globalSearch').value.trim().toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                resultsContainer.style.display = 'none';
+                return;
+            }
+            
+            const results = [];
+            
+            // Search students
+            currentUserData.students.forEach(student => {
+                const fullName = `${student.name} ${student.lastName}`.toLowerCase();
+                if (fullName.includes(query)) {
+                    const classroom = currentUserData.classrooms.find(c => c.id === student.classroomId);
+                    results.push({
+                        type: 'student',
+                        id: student.id,
+                        title: `${student.name} ${student.lastName}`,
+                        subtitle: classroom ? `${classroom.name} - ${classroom.school}` : 'Sin aula asignada'
+                    });
+                }
+            });
+            
+            // Display results
+            resultsContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="search-result-item">
+                        <span style="color: var(--text-muted);">No se encontraron resultados</span>
+                    </div>
+                `;
+            } else {
+                results.forEach(result => {
+                    const item = document.createElement('div');
+                    item.className = 'search-result-item';
+                    item.onclick = () => selectSearchResult(result);
+                    item.innerHTML = `
+                        <div>
+                            <strong>${result.title}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">${result.subtitle}</div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(item);
+                });
+            }
+            
+            resultsContainer.style.display = 'block';
+        }
+
+        function selectSearchResult(result) {
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('globalSearch').value = '';
+            
+            if (result.type === 'student') {
+                showStudentDetail(result.id);
+            }
+        }
+
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.header-search')) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
+
+        // Classroom Functions
         function loadClassroomsList() {
             const container = document.getElementById('classroomsList');
             container.innerHTML = '';
             
-            if (appData.classrooms.length === 0) {
+            if (currentUserData.classrooms.length === 0) {
                 container.innerHTML = `
                     <div class="card text-center" style="padding: 3rem;">
                         <h3 style="color: var(--text-muted); margin-bottom: 1rem;">No hay aulas registradas</h3>
@@ -1220,11 +2016,14 @@
                 return;
             }
             
-            appData.classrooms.forEach(classroom => {
-                const students = appData.students.filter(s => s.classroomId === classroom.id);
+            currentUserData.classrooms.forEach(classroom => {
+                const students = currentUserData.students.filter(s => s.classroomId === classroom.id);
                 const studentCount = students.length;
                 const approvedCount = students.filter(s => s.average >= 7).length;
                 const attendancePercentage = calculateClassroomAttendance(classroom.id);
+                
+                const school = systemData.schools.find(s => s.id === classroom.schoolId);
+                const schoolName = school ? school.name : 'Colegio no encontrado';
                 
                 const card = document.createElement('div');
                 card.className = 'card mb-3';
@@ -1232,8 +2031,8 @@
                     <div class="card-content">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div style="flex: 1;">
-                                <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">${classroom.name}</h3>
-                                <p style="color: var(--text-muted); margin-bottom: 1rem;">${classroom.school} - ${classroom.shift}</p>
+                                <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">${classroom.year}° ${classroom.division}</h3>
+                                <p style="color: var(--text-muted); margin-bottom: 1rem;">${schoolName} - ${classroom.shift}</p>
                                 
                                 <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
                                     <div>
@@ -1246,6 +2045,12 @@
                                         <span class="badge badge-info">${attendancePercentage}% asistencia</span>
                                     </div>
                                 </div>
+                                
+                                ${classroom.classroomCode ? `
+                                    <div style="font-size: 0.875rem; color: var(--text-muted);">
+                                        Código Classroom: ${classroom.classroomCode}
+                                    </div>
+                                ` : ''}
                             </div>
                             
                             <div style="display: flex; gap: 0.5rem;">
@@ -1254,6 +2059,9 @@
                                 </button>
                                 <button class="btn btn-secondary btn-sm" onclick="startAttendanceForClassroom(${classroom.id})">
                                     Asistencia
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteClassroom(${classroom.id})">
+                                    Eliminar
                                 </button>
                             </div>
                         </div>
@@ -1265,7 +2073,7 @@
         }
 
         function calculateClassroomAttendance(classroomId) {
-            const students = appData.students.filter(s => s.classroomId === classroomId);
+            const students = currentUserData.students.filter(s => s.classroomId === classroomId);
             if (students.length === 0) return 0;
             
             let totalPercentage = 0;
@@ -1282,18 +2090,204 @@
             return studentsWithAttendance > 0 ? Math.round(totalPercentage / studentsWithAttendance) : 0;
         }
 
+        function showAddClassroom() {
+            showModal('Agregar Nueva Aula', `
+                <div class="form-group">
+                    <label class="form-label">Año</label>
+                    <select class="form-select" id="classroomYear">
+                        <option value="">Seleccionar año</option>
+                        <option value="1">1°</option>
+                        <option value="2">2°</option>
+                        <option value="3">3°</option>
+                        <option value="4">4°</option>
+                        <option value="5">5°</option>
+                        <option value="6">6°</option>
+                        <option value="7">7°</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">División</label>
+                    <input type="text" class="form-input" id="classroomDivision" placeholder="A, B, C...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Colegio</label>
+                    <select class="form-select" id="classroomSchool" onchange="toggleNewSchool()">
+                        <option value="">Seleccionar colegio</option>
+                        ${systemData.schools.map(school => `<option value="${school.id}">${school.name}</option>`).join('')}
+                        <option value="new">+ Registrar nuevo colegio</option>
+                    </select>
+                </div>
+                
+                <div id="newSchoolFields" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">Nombre del Colegio</label>
+                        <input type="text" class="form-input" id="newSchoolName" placeholder="Nombre del colegio">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" class="form-input" id="newSchoolAddress" placeholder="Dirección">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" class="form-input" id="newSchoolPhone" placeholder="Teléfono">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Turno</label>
+                    <select class="form-select" id="classroomShift">
+                        <option value="">Seleccionar turno</option>
+                        <option value="Mañana">Mañana</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noche">Noche</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Código Classroom (opcional)</label>
+                    <input type="text" class="form-input" id="classroomCode" placeholder="abc123">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Enlace Classroom (opcional)</label>
+                    <input type="url" class="form-input" id="classroomLink" placeholder="https://classroom.google.com/c/...">
+                </div>
+            `, [
+                { text: 'Cancelar', class: 'btn-secondary', onclick: 'closeModal()' },
+                { text: 'Crear Aula', class: 'btn-primary', onclick: 'createClassroom()' }
+            ]);
+        }
+
+        function toggleNewSchool() {
+            const select = document.getElementById('classroomSchool');
+            const newSchoolFields = document.getElementById('newSchoolFields');
+            
+            if (select.value === 'new') {
+                newSchoolFields.classList.remove('hidden');
+            } else {
+                newSchoolFields.classList.add('hidden');
+            }
+        }
+
+        function createClassroom() {
+            const year = document.getElementById('classroomYear').value;
+            const division = document.getElementById('classroomDivision').value.trim();
+            const schoolId = document.getElementById('classroomSchool').value;
+            const shift = document.getElementById('classroomShift').value;
+            const classroomCode = document.getElementById('classroomCode').value.trim();
+            const classroomLink = document.getElementById('classroomLink').value.trim();
+            
+            if (!year || !division || !shift) {
+                showError('Por favor complete los campos obligatorios');
+                return;
+            }
+            
+            let finalSchoolId = schoolId;
+            
+            // Handle new school creation
+            if (schoolId === 'new') {
+                const newSchoolName = document.getElementById('newSchoolName').value.trim();
+                const newSchoolAddress = document.getElementById('newSchoolAddress').value.trim();
+                const newSchoolPhone = document.getElementById('newSchoolPhone').value.trim();
+                
+                if (!newSchoolName) {
+                    showError('Por favor ingrese el nombre del colegio');
+                    return;
+                }
+                
+                const newSchool = {
+                    id: Date.now(),
+                    name: newSchoolName,
+                    address: newSchoolAddress,
+                    phone: newSchoolPhone
+                };
+                
+                systemData.schools.push(newSchool);
+                localStorage.setItem('casuiteSchools', JSON.stringify(systemData.schools));
+                finalSchoolId = newSchool.id;
+            }
+            
+            if (!finalSchoolId) {
+                showError('Por favor seleccione un colegio');
+                return;
+            }
+            
+            // Check for duplicate classroom
+            const exists = currentUserData.classrooms.find(c => 
+                c.year === year && c.division === division && c.schoolId == finalSchoolId && c.shift === shift
+            );
+            
+            if (exists) {
+                showError('Ya existe un aula con estos datos');
+                return;
+            }
+            
+            const newClassroom = {
+                id: Date.now(),
+                year: year,
+                division: division,
+                schoolId: parseInt(finalSchoolId),
+                shift: shift,
+                classroomCode: classroomCode,
+                classroomLink: classroomLink,
+                createdAt: new Date().toISOString()
+            };
+            
+            currentUserData.classrooms.push(newClassroom);
+            saveUserData();
+            closeModal();
+            loadClassroomsList();
+            showSuccess('Aula creada exitosamente');
+        }
+
+        function deleteClassroom(classroomId) {
+            const classroom = currentUserData.classrooms.find(c => c.id === classroomId);
+            if (!classroom) return;
+            
+            const students = currentUserData.students.filter(s => s.classroomId === classroomId);
+            
+            let message = `¿Está seguro que desea eliminar el aula ${classroom.year}° ${classroom.division}?`;
+            if (students.length > 0) {
+                message += `\n\nEsto también eliminará ${students.length} estudiante(s) y todos sus datos asociados.`;
+            }
+            
+            if (confirm(message)) {
+                // Remove classroom
+                currentUserData.classrooms = currentUserData.classrooms.filter(c => c.id !== classroomId);
+                
+                // Remove students
+                const studentIds = students.map(s => s.id);
+                currentUserData.students = currentUserData.students.filter(s => s.classroomId !== classroomId);
+                
+                // Remove attendance records
+                studentIds.forEach(studentId => {
+                    delete currentUserData.attendance[studentId];
+                    delete currentUserData.observations[studentId];
+                });
+                
+                saveUserData();
+                loadClassroomsList();
+                showSuccess('Aula eliminada exitosamente');
+            }
+        }
+
         function loadClassroomDetail(classroomId) {
-            const classroom = appData.classrooms.find(c => c.id === classroomId);
+            const classroom = currentUserData.classrooms.find(c => c.id === classroomId);
             if (!classroom) return;
             
             currentClassroom = classroom;
             
+            const school = systemData.schools.find(s => s.id === classroom.schoolId);
+            const schoolName = school ? school.name : 'Colegio no encontrado';
+            
             // Update header
-            document.getElementById('classroomTitle').textContent = classroom.name;
-            document.getElementById('classroomSubtitle').textContent = `${classroom.school} - ${classroom.shift}`;
+            document.getElementById('classroomTitle').textContent = `CASuite || ${classroom.year}° ${classroom.division}`;
+            document.getElementById('classroomSubtitle').textContent = `${schoolName} - ${classroom.shift}`;
             
             // Get students for this classroom
-            const students = appData.students.filter(s => s.classroomId === classroomId);
+            const students = currentUserData.students.filter(s => s.classroomId === classroomId);
             
             // Update stats
             const totalStudents = students.length;
@@ -1317,7 +2311,7 @@
             if (students.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="5" class="text-center" style="padding: 2rem; color: var(--text-muted);">
+                        <td colspan="6" class="text-center" style="padding: 2rem; color: var(--text-muted);">
                             No hay estudiantes en esta aula
                         </td>
                     </tr>
@@ -1337,6 +2331,9 @@
                 const statusBadge = student.isRepeater ? 
                     '<span class="badge badge-warning">Recursante</span>' : 
                     '<span class="badge badge-success">Regular</span>';
+                
+                const observations = currentUserData.observations[student.id] || [];
+                const observationCount = observations.length;
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -1360,6 +2357,12 @@
                         </span>
                     </td>
                     <td>
+                        <span class="badge badge-info">${observationCount}</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="showStudentDetail(${student.id})">
+                            Ver Perfil
+                        </button>
                         <button class="btn btn-secondary btn-sm" onclick="editStudent(${student.id})">
                             Editar
                         </button>
@@ -1370,12 +2373,462 @@
             });
         }
 
+        function showAddStudent() {
+            if (!currentClassroom) return;
+            
+            showModal('Agregar Nuevo Estudiante', `
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-input" id="studentName" placeholder="Nombre">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Apellido</label>
+                        <input type="text" class="form-input" id="studentLastName" placeholder="Apellido">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Promedio</label>
+                        <input type="number" class="form-input" id="studentAverage" placeholder="0.0" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" id="studentStatus">
+                            <option value="false">Regular</option>
+                            <option value="true">Recursante</option>
+                        </select>
+                    </div>
+                </div>
+            `, [
+                { text: 'Cancelar', class: 'btn-secondary', onclick: 'closeModal()' },
+                { text: 'Agregar Estudiante', class: 'btn-primary', onclick: 'createStudent()' }
+            ]);
+        }
+
+        function createStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const lastName = document.getElementById('studentLastName').value.trim();
+            const average = parseFloat(document.getElementById('studentAverage').value) || 0;
+            const isRepeater = document.getElementById('studentStatus').value === 'true';
+            
+            if (!name || !lastName) {
+                showError('Por favor complete nombre y apellido');
+                return;
+            }
+            
+            if (average < 0 || average > 10) {
+                showError('El promedio debe estar entre 0 y 10');
+                return;
+            }
+            
+            const newStudent = {
+                id: Date.now(),
+                name: name,
+                lastName: lastName,
+                classroomId: currentClassroom.id,
+                isRepeater: isRepeater,
+                average: average,
+                createdAt: new Date().toISOString()
+            };
+            
+            currentUserData.students.push(newStudent);
+            currentUserData.attendance[newStudent.id] = {};
+            currentUserData.observations[newStudent.id] = [];
+            
+            saveUserData();
+            closeModal();
+            loadClassroomDetail(currentClassroom.id);
+            showSuccess('Estudiante agregado exitosamente');
+        }
+
+        function importStudents() {
+            showModal('Importar Lista de Estudiantes', `
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">
+                    Pegue la lista de estudiantes, uno por línea en el formato: Apellido, Nombre
+                </p>
+                <div class="form-group">
+                    <textarea class="form-textarea" id="studentsList" placeholder="García, Juan&#10;Pérez, María&#10;Rodríguez, Carlos" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="importAsRepeaters" style="margin-right: 0.5rem;">
+                        Marcar todos como recursantes
+                    </label>
+                </div>
+            `, [
+                { text: 'Cancelar', class: 'btn-secondary', onclick: 'closeModal()' },
+                { text: 'Importar Estudiantes', class: 'btn-primary', onclick: 'processStudentImport()' }
+            ]);
+        }
+
+        function processStudentImport() {
+            const studentsList = document.getElementById('studentsList').value.trim();
+            const importAsRepeaters = document.getElementById('importAsRepeaters').checked;
+            
+            if (!studentsList) {
+                showError('Por favor ingrese la lista de estudiantes');
+                return;
+            }
+            
+            const lines = studentsList.split('\n').filter(line => line.trim());
+            const students = [];
+            const errors = [];
+            
+            lines.forEach((line, index) => {
+                const parts = line.trim().split(',');
+                if (parts.length >= 2) {
+                    const lastName = parts[0].trim();
+                    const name = parts[1].trim();
+                    
+                    if (lastName && name) {
+                        students.push({
+                            id: Date.now() + index,
+                            name: name,
+                            lastName: lastName,
+                            classroomId: currentClassroom.id,
+                            isRepeater: importAsRepeaters,
+                            average: 0,
+                            createdAt: new Date().toISOString()
+                        });
+                    } else {
+                        errors.push(`Línea ${index + 1}: Formato incorrecto`);
+                    }
+                } else {
+                    errors.push(`Línea ${index + 1}: Formato incorrecto`);
+                }
+            });
+            
+            if (errors.length > 0) {
+                showError('Errores encontrados:\n' + errors.join('\n'));
+                return;
+            }
+            
+            if (students.length === 0) {
+                showError('No se encontraron estudiantes válidos');
+                return;
+            }
+            
+            // Add students
+            students.forEach(student => {
+                currentUserData.students.push(student);
+                currentUserData.attendance[student.id] = {};
+                currentUserData.observations[student.id] = [];
+            });
+            
+            saveUserData();
+            closeModal();
+            loadClassroomDetail(currentClassroom.id);
+            showSuccess(`${students.length} estudiantes importados exitosamente`);
+        }
+
+        function editStudent(studentId) {
+            const student = currentUserData.students.find(s => s.id === studentId);
+            if (!student) return;
+            
+            showModal('Editar Estudiante', `
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-input" id="editStudentName" value="${student.name}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Apellido</label>
+                        <input type="text" class="form-input" id="editStudentLastName" value="${student.lastName}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Promedio</label>
+                        <input type="number" class="form-input" id="editStudentAverage" value="${student.average}" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" id="editStudentStatus">
+                            <option value="false" ${!student.isRepeater ? 'selected' : ''}>Regular</option>
+                            <option value="true" ${student.isRepeater ? 'selected' : ''}>Recursante</option>
+                        </select>
+                    </div>
+                </div>
+            `, [
+                { text: 'Cancelar', class: 'btn-secondary', onclick: 'closeModal()' },
+                { text: 'Eliminar', class: 'btn-danger', onclick: `deleteStudent(${studentId})` },
+                { text: 'Guardar Cambios', class: 'btn-primary', onclick: `updateStudent(${studentId})` }
+            ]);
+        }
+
+        function updateStudent(studentId) {
+            const student = currentUserData.students.find(s => s.id === studentId);
+            if (!student) return;
+            
+            const name = document.getElementById('editStudentName').value.trim();
+            const lastName = document.getElementById('editStudentLastName').value.trim();
+            const average = parseFloat(document.getElementById('editStudentAverage').value) || 0;
+            const isRepeater = document.getElementById('editStudentStatus').value === 'true';
+            
+            if (!name || !lastName) {
+                showError('Por favor complete nombre y apellido');
+                return;
+            }
+            
+            if (average < 0 || average > 10) {
+                showError('El promedio debe estar entre 0 y 10');
+                return;
+            }
+            
+            student.name = name;
+            student.lastName = lastName;
+            student.average = average;
+            student.isRepeater = isRepeater;
+            
+            saveUserData();
+            closeModal();
+            loadClassroomDetail(currentClassroom.id);
+            showSuccess('Estudiante actualizado exitosamente');
+        }
+
+        function deleteStudent(studentId) {
+            if (confirm('¿Está seguro que desea eliminar este estudiante?\n\nSe perderán todos sus datos de asistencia y observaciones.')) {
+                currentUserData.students = currentUserData.students.filter(s => s.id !== studentId);
+                delete currentUserData.attendance[studentId];
+                delete currentUserData.observations[studentId];
+                
+                saveUserData();
+                closeModal();
+                loadClassroomDetail(currentClassroom.id);
+                showSuccess('Estudiante eliminado exitosamente');
+            }
+        }
+
+        // Student Detail Functions
+        function loadStudentDetail(studentId) {
+            const student = currentUserData.students.find(s => s.id === studentId);
+            if (!student) return;
+            
+            currentStudent = student;
+            
+            const classroom = currentUserData.classrooms.find(c => c.id === student.classroomId);
+            const school = classroom ? systemData.schools.find(s => s.id === classroom.schoolId) : null;
+            
+            // Update header
+            document.getElementById('studentTitle').textContent = `CASuite || ${student.name} ${student.lastName}`;
+            document.getElementById('studentSubtitle').textContent = classroom && school ? 
+                `${classroom.year}° ${classroom.division} - ${school.name}` : 'Sin aula asignada';
+            
+            // Load student info
+            loadStudentInfo(student, classroom, school);
+            
+            // Load attendance history
+            loadStudentAttendanceHistory(student);
+            
+            // Load observations
+            loadStudentObservations(student);
+        }
+
+        function loadStudentInfo(student, classroom, school) {
+            const attendancePercentage = calculateStudentAttendancePercentage(student.id);
+            const observations = currentUserData.observations[student.id] || [];
+            
+            document.getElementById('studentInfo').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <strong>Nombre Completo:</strong><br>
+                        ${student.name} ${student.lastName}
+                    </div>
+                    <div>
+                        <strong>Estado:</strong><br>
+                        <span class="badge ${student.isRepeater ? 'badge-warning' : 'badge-success'}">
+                            ${student.isRepeater ? 'Recursante' : 'Regular'}
+                        </span>
+                    </div>
+                    <div>
+                        <strong>Promedio:</strong><br>
+                        <span class="badge ${student.average >= 7 ? 'badge-success' : 'badge-warning'}">
+                            ${student.average.toFixed(1)}
+                        </span>
+                    </div>
+                    <div>
+                        <strong>Asistencia:</strong><br>
+                        <span class="badge badge-info">${attendancePercentage}%</span>
+                    </div>
+                    <div>
+                        <strong>Aula:</strong><br>
+                        ${classroom ? `${classroom.year}° ${classroom.division}` : 'Sin asignar'}
+                    </div>
+                    <div>
+                        <strong>Colegio:</strong><br>
+                        ${school ? school.name : 'Sin asignar'}
+                    </div>
+                    <div>
+                        <strong>Observaciones:</strong><br>
+                        <span class="badge badge-info">${observations.length}</span>
+                    </div>
+                    <div>
+                        <strong>Fecha de Registro:</strong><br>
+                        ${new Date(student.createdAt).toLocaleDateString('es-ES')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadStudentAttendanceHistory(student) {
+            const attendance = currentUserData.attendance[student.id] || {};
+            const container = document.getElementById('studentAttendanceHistory');
+            
+            if (Object.keys(attendance).length === 0) {
+                container.innerHTML = `
+                    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                        No hay registros de asistencia
+                    </p>
+                `;
+                return;
+            }
+            
+            const sortedDates = Object.keys(attendance).sort().reverse();
+            const recentDates = sortedDates.slice(0, 20); // Show last 20 records
+            
+            let html = '<div style="display: grid; gap: 0.5rem;">';
+            
+            recentDates.forEach(date => {
+                const status = attendance[date];
+                const statusText = status === 'P' ? 'Presente' : status === 'T' ? 'Tarde' : 'Ausente';
+                const statusClass = status === 'P' ? 'badge-success' : status === 'T' ? 'badge-warning' : 'badge-error';
+                
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--primary-bg); border-radius: var(--radius-sm);">
+                        <span>${new Date(date).toLocaleDateString('es-ES')}</span>
+                        <span class="badge ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            
+            if (sortedDates.length > 20) {
+                html += `<p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.875rem;">Mostrando los últimos 20 registros de ${sortedDates.length} total</p>`;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function loadStudentObservations(student) {
+            const observations = currentUserData.observations[student.id] || [];
+            const container = document.getElementById('studentObservations');
+            
+            if (observations.length === 0) {
+                container.innerHTML = `
+                    <p style="color: var(--text-muted); text-align: center; padding: 1rem; font-style: italic;">
+                        No hay observaciones
+                    </p>
+                `;
+                return;
+            }
+            
+            const sortedObservations = [...observations].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 1rem;">';
+            
+            sortedObservations.forEach(obs => {
+                const typeColor = {
+                    'Comportamiento': 'badge-warning',
+                    'Felicitaciones': 'badge-success',
+                    'Académico': 'badge-info',
+                    'Participación': 'badge-info',
+                    'Asistencia': 'badge-warning',
+                    'General': 'badge-info'
+                };
+                
+                html += `
+                    <div style="padding: 1rem; background: var(--primary-bg); border-radius: var(--radius-md); border-left: 3px solid var(--info);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span class="badge ${typeColor[obs.type] || 'badge-info'}">${obs.type}</span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">${new Date(obs.date).toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9rem; line-height: 1.4;">${obs.text}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function addObservation() {
+            if (!currentStudent) return;
+            
+            showModal('Agregar Observación', `
+                <div class="form-group">
+                    <label class="form-label">Tipo de Observación</label>
+                    <select class="form-select" id="observationType">
+                        ${systemData.observationTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Observación</label>
+                    <textarea class="form-textarea" id="observationText" placeholder="Escriba la observación..." rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" class="form-input" id="observationDate" value="${new Date().toISOString().split('T')[0]}">
+                </div>
+            `, [
+                { text: 'Cancelar', class: 'btn-secondary', onclick: 'closeModal()' },
+                { text: 'Agregar Observación', class: 'btn-primary', onclick: 'createObservation()' }
+            ]);
+        }
+
+        function createObservation() {
+            const type = document.getElementById('observationType').value;
+            const text = document.getElementById('observationText').value.trim();
+            const date = document.getElementById('observationDate').value;
+            
+            if (!text) {
+                showError('Por favor ingrese la observación');
+                return;
+            }
+            
+            if (!date) {
+                showError('Por favor seleccione una fecha');
+                return;
+            }
+            
+            const newObservation = {
+                id: Date.now(),
+                type: type,
+                text: text,
+                date: date,
+                createdAt: new Date().toISOString()
+            };
+            
+            if (!currentUserData.observations[currentStudent.id]) {
+                currentUserData.observations[currentStudent.id] = [];
+            }
+            
+            currentUserData.observations[currentStudent.id].push(newObservation);
+            saveUserData();
+            closeModal();
+            loadStudentObservations(currentStudent);
+            showSuccess('Observación agregada exitosamente');
+        }
+
+        function goBackFromStudent() {
+            if (currentClassroom) {
+                showClassroomDetail(currentClassroom.id);
+            } else {
+                showDashboard();
+            }
+        }
+
         // Attendance Functions
         function loadAttendanceClassrooms() {
             const container = document.getElementById('attendanceClassroomsList');
             container.innerHTML = '';
             
-            if (appData.classrooms.length === 0) {
+            if (currentUserData.classrooms.length === 0) {
                 container.innerHTML = `
                     <div class="text-center" style="padding: 2rem;">
                         <p style="color: var(--text-muted);">No hay aulas disponibles para tomar asistencia</p>
@@ -1384,16 +2837,18 @@
                 return;
             }
             
-            appData.classrooms.forEach(classroom => {
-                const students = appData.students.filter(s => s.classroomId === classroom.id);
+            currentUserData.classrooms.forEach(classroom => {
+                const students = currentUserData.students.filter(s => s.classroomId === classroom.id);
                 const studentCount = students.length;
+                const school = systemData.schools.find(s => s.id === classroom.schoolId);
+                const schoolName = school ? school.name : 'Colegio no encontrado';
                 
                 const item = document.createElement('div');
                 item.className = 'menu-item';
-                item.onclick = () => startAttendanceForClassroom(classroom.id);
+                item.onclick = () => selectClassroomForAttendance(classroom.id);
                 item.innerHTML = `
                     <div>
-                        <div class="menu-title">${classroom.name} - ${classroom.school}</div>
+                        <div class="menu-title">${classroom.year}° ${classroom.division} - ${schoolName}</div>
                         <div class="menu-description">${studentCount} estudiantes - ${classroom.shift}</div>
                     </div>
                 `;
@@ -1402,310 +2857,77 @@
             });
         }
 
-        function startAttendanceForClassroom(classroomId) {
-            const classroom = appData.classrooms.find(c => c.id === classroomId);
-            const students = appData.students.filter(s => s.classroomId === classroomId);
+        function selectClassroomForAttendance(classroomId) {
+            const classroom = currentUserData.classrooms.find(c => c.id === classroomId);
+            if (!classroom) return;
+            
+            currentClassroom = classroom;
+            
+            // Show date selection
+            hideAllSections();
+            document.getElementById('attendanceDateSelection').classList.remove('hidden');
+            
+            const school = systemData.schools.find(s => s.id === classroom.schoolId);
+            const schoolName = school ? school.name : 'Colegio no encontrado';
+            
+            document.getElementById('attendanceClassroomInfo').textContent = 
+                `${classroom.year}° ${classroom.division} - ${schoolName}`;
+            
+            document.getElementById('todayDate').textContent = 
+                new Date().toLocaleDateString('es-ES');
+            
+            // Reset date selection
+            selectedDateOption = 'today';
+            document.querySelectorAll('.date-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('.date-option')[0].classList.add('selected');
+        }
+
+        function selectDateOption(option) {
+            selectedDateOption = option;
+            
+            document.querySelectorAll('.date-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            if (option === 'today') {
+                document.querySelectorAll('.date-option')[0].classList.add('selected');
+            } else {
+                document.querySelectorAll('.date-option')[1].classList.add('selected');
+            }
+        }
+
+        function startAttendanceWithDate() {
+            let selectedDate;
+            
+            if (selectedDateOption === 'today') {
+                selectedDate = new Date().toISOString().split('T')[0];
+            } else {
+                selectedDate = document.getElementById('customDate').value;
+                if (!selectedDate) {
+                    showError('Por favor seleccione una fecha');
+                    return;
+                }
+            }
+            
+            startAttendanceForClassroom(currentClassroom.id, selectedDate);
+        }
+
+        function startAttendanceForClassroom(classroomId, date = null) {
+            const classroom = currentUserData.classrooms.find(c => c.id === classroomId);
+            const students = currentUserData.students.filter(s => s.classroomId === classroomId);
             
             if (students.length === 0) {
                 showError('No hay estudiantes en esta aula');
                 return;
             }
             
-            // Sort students alphabetically
-            const sortedStudents = [...students].sort((a, b) => {
-                const lastNameCompare = a.lastName.localeCompare(b.lastName);
-                if (lastNameCompare !== 0) return lastNameCompare;
-                return a.name.localeCompare(b.name);
-            });
+            const attendanceDate = date || new Date().toISOString().split('T')[0];
             
-            // Initialize attendance session
-            currentAttendanceSession = {
-                classroomId: classroomId,
-                classroom: classroom,
-                students: sortedStudents,
-                currentIndex: 0,
-                date: new Date().toISOString().split('T')[0],
-                records: {}
-            };
+            // Check if attendance already exists for this date
+            const existingAttendance = students.some(student => 
+                currentUserData.attendance[student.id] && currentUserData.attendance[student.id][attendanceDate]
+            );
             
-            // Show individual attendance screen
-            hideAllSections();
-            document.getElementById('individualAttendance').classList.remove('hidden');
-            
-            // Update UI
-            document.getElementById('attendanceInfo').textContent = 
-                `${classroom.name} - ${classroom.school} | ${new Date().toLocaleDateString('es-ES')}`;
-            
-            showCurrentStudent();
-        }
-
-        function showCurrentStudent() {
-            if (!currentAttendanceSession) return;
-            
-            const session = currentAttendanceSession;
-            const student = session.students[session.currentIndex];
-            
-            if (!student) {
-                finishAttendanceSession();
-                return;
-            }
-            
-            // Update UI
-            document.getElementById('currentStudentName').textContent = 
-                `${student.name} ${student.lastName}`;
-            document.getElementById('attendanceProgress').textContent = 
-                `${session.currentIndex + 1}/${session.students.length}`;
-        }
-
-        function markAttendance(status) {
-            if (!currentAttendanceSession) return;
-            
-            const session = currentAttendanceSession;
-            const student = session.students[session.currentIndex];
-            
-            if (!student) return;
-            
-            // Record attendance
-            session.records[student.id] = status;
-            
-            // Move to next student
-            session.currentIndex++;
-            showCurrentStudent();
-        }
-
-        function cancelAttendance() {
-            if (confirm('¿Está seguro que desea cancelar la toma de asistencia?\n\nSe perderán todos los datos ingresados.')) {
-                currentAttendanceSession = null;
-                showAttendance();
-            }
-        }
-
-        function finishAttendanceSession() {
-            if (!currentAttendanceSession) return;
-            
-            const session = currentAttendanceSession;
-            
-            // Save attendance records
-            session.students.forEach(student => {
-                if (!appData.attendance[student.id]) {
-                    appData.attendance[student.id] = {};
-                }
-                
-                appData.attendance[student.id][session.date] = session.records[student.id] || 'A';
-            });
-            
-            // Save data
-            saveUserData();
-            
-            // Calculate results
-            const presentCount = Object.values(session.records).filter(s => s === 'P').length;
-            const absentCount = Object.values(session.records).filter(s => s === 'A').length;
-            const lateCount = Object.values(session.records).filter(s => s === 'T').length;
-            
-            // Show success message
-            showSuccess(`Asistencia guardada exitosamente!\n\nPresentes: ${presentCount}\nAusentes: ${absentCount}\nTardanzas: ${lateCount}`);
-            
-            // Reset session
-            currentAttendanceSession = null;
-            
-            // Return to attendance section
-            showAttendance();
-        }
-
-        // Report Functions
-        function generateStudentReport() {
-            let report = 'REPORTE DE ESTUDIANTES\n';
-            report += '═══════════════════════════════════════\n\n';
-            
-            appData.classrooms.forEach(classroom => {
-                const students = appData.students.filter(s => s.classroomId === classroom.id);
-                
-                report += `AULA: ${classroom.name} - ${classroom.school}\n`;
-                report += `TURNO: ${classroom.shift}\n`;
-                report += `TOTAL ESTUDIANTES: ${students.length}\n\n`;
-                
-                if (students.length > 0) {
-                    report += 'ESTUDIANTES:\n';
-                    report += '─────────────────────────────────────────\n';
-                    
-                    students.sort((a, b) => {
-                        const lastNameCompare = a.lastName.localeCompare(b.lastName);
-                        if (lastNameCompare !== 0) return lastNameCompare;
-                        return a.name.localeCompare(b.name);
-                    }).forEach((student, index) => {
-                        const status = student.isRepeater ? ' (R)' : '';
-                        report += `${index + 1}. ${student.lastName}, ${student.name}${status} - Promedio: ${student.average}\n`;
-                    });
-                }
-                
-                report += '\n';
-            });
-            
-            report += `\nReporte generado: ${new Date().toLocaleString('es-ES')}\n`;
-            report += `Usuario: ${currentUser.name}\n`;
-            
-            downloadReport(report, 'Reporte_Estudiantes.txt');
-        }
-
-        function generateAttendanceReport() {
-            let report = 'REPORTE DE ASISTENCIA\n';
-            report += '═══════════════════════════════════════\n\n';
-            
-            appData.classrooms.forEach(classroom => {
-                const students = appData.students.filter(s => s.classroomId === classroom.id);
-                
-                report += `AULA: ${classroom.name} - ${classroom.school}\n`;
-                report += `TURNO: ${classroom.shift}\n`;
-                report += `TOTAL ESTUDIANTES: ${students.length}\n\n`;
-                
-                if (students.length > 0) {
-                    report += 'ESTADÍSTICAS DE ASISTENCIA:\n';
-                    report += '─────────────────────────────────────────\n';
-                    
-                    students.forEach(student => {
-                        const percentage = calculateStudentAttendancePercentage(student.id);
-                        report += `${student.lastName}, ${student.name}: ${percentage}%\n`;
-                    });
-                }
-                
-                report += '\n';
-            });
-            
-            report += `\nReporte generado: ${new Date().toLocaleString('es-ES')}\n`;
-            report += `Usuario: ${currentUser.name}\n`;
-            
-            downloadReport(report, 'Reporte_Asistencia.txt');
-        }
-
-        function generateGradeReport() {
-            let report = 'REPORTE DE CALIFICACIONES\n';
-            report += '═══════════════════════════════════════\n\n';
-            
-            appData.classrooms.forEach(classroom => {
-                const students = appData.students.filter(s => s.classroomId === classroom.id);
-                
-                report += `AULA: ${classroom.name} - ${classroom.school}\n`;
-                report += `TURNO: ${classroom.shift}\n`;
-                report += `TOTAL ESTUDIANTES: ${students.length}\n`;
-                
-                if (students.length > 0) {
-                    const approvedCount = students.filter(s => s.average >= 7).length;
-                    const averageGrade = students.reduce((sum, s) => sum + s.average, 0) / students.length;
-                    
-                    report += `APROBADOS (≥7): ${approvedCount} (${Math.round((approvedCount / students.length) * 100)}%)\n`;
-                    report += `PROMEDIO GENERAL: ${averageGrade.toFixed(2)}\n\n`;
-                    
-                    report += 'DETALLE POR ESTUDIANTE:\n';
-                    report += '─────────────────────────────────────────\n';
-                    
-                    students.sort((a, b) => b.average - a.average).forEach((student, index) => {
-                        const status = student.average >= 7 ? 'APROBADO' : 'DESAPROBADO';
-                        report += `${index + 1}. ${student.lastName}, ${student.name}: ${student.average} (${status})\n`;
-                    });
-                }
-                
-                report += '\n';
-            });
-            
-            report += `\nReporte generado: ${new Date().toLocaleString('es-ES')}\n`;
-            report += `Usuario: ${currentUser.name}\n`;
-            
-            downloadReport(report, 'Reporte_Calificaciones.txt');
-        }
-
-        function downloadReport(content, filename) {
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            showSuccess('Reporte descargado exitosamente');
-        }
-
-        // Utility Functions
-        function showError(message) {
-            alert('❌ Error: ' + message);
-        }
-
-        function showSuccess(message) {
-            alert('✅ ' + message);
-        }
-
-        function showAddClassroom() {
-            showError('Función de agregar aula en desarrollo');
-        }
-
-        function showAddStudent() {
-            showError('Función de agregar estudiante en desarrollo');
-        }
-
-        function editStudent(studentId) {
-            showError('Función de editar estudiante en desarrollo');
-        }
-
-        function showSettings() {
-            showError('Configuración en desarrollo');
-        }
-
-        // Logout
-        function logout() {
-            if (confirm('¿Está seguro que desea cerrar sesión?')) {
-                // Save data before logout
-                saveUserData();
-                
-                // Reset variables
-                currentUser = null;
-                currentUserData = null;
-                currentClassroom = null;
-                currentAttendanceSession = null;
-                
-                // Show login screen
-                document.getElementById('mainApp').classList.add('hidden');
-                document.getElementById('loginScreen').classList.remove('hidden');
-                
-                // Clear form
-                document.getElementById('username').value = '';
-            }
-        }
-
-        // Keyboard Shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                if (!document.getElementById('loginScreen').classList.contains('hidden')) {
-                    return;
-                }
-                
-                if (!document.getElementById('dashboard').classList.contains('hidden')) {
-                    logout();
-                } else {
-                    showDashboard();
-                }
-            }
-        });
-
-        // Enter key support for login
-        document.getElementById('username').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loginWithUsername();
-            }
-        });
-
-        // Initialize Application
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Cátedra Abierta Suite initialized');
-            initializeGoogleAuth();
-            
-            // Auto-save data every 30 seconds
-            setInterval(() => {
-                if (currentUser) {
-                    saveUserData();
-                }
-            }, 30000);
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96978013a07f6ccb',t:'MTc1NDI0MTc4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+            if (existingAttendance<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9697e5b076a62752',t:'MTc1NDI0NTk0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
