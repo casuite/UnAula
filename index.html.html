@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cátedra Abierta Suite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f0f4ff;
+      --card: #ffffff;
+      --primary: #3366cc;
+      --accent: #28a745;
+      --danger: #dc3545;
+      --text: #212529;
+      --border: #ccc;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .screen {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--primary);
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      background: var(--primary);
+      cursor: pointer;
+    }
+    .menu-item {
+      background: #eef;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .menu-item:hover {
+      background: #dde;
+    }
+    .search-bar {
+      margin-bottom: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="loginScreen" class="screen active">
+  <h2>Cátedra Abierta Suite</h2>
+  <label>Usuario</label>
+  <input id="username" placeholder="Ej. profe1">
+  <button onclick="login()">Ingresar</button>
+</div>
+
+<div id="mainMenu" class="screen">
+  <h2>Menú Principal</h2>
+  <input id="mainSearch" class="search-bar" placeholder="Buscar aula...">
+  <div id="mainMenuItems">
+    <div class="menu-item" onclick="showScreen('classroomManager')">Aulas</div>
+    <div class="menu-item" onclick="showScreen('attendanceManager')">Asistencia</div>
+    <div class="menu-item" onclick="showScreen('reports')">Reportes</div>
+  </div>
+  <button onclick="logout()" style="background: var(--danger);">Salir</button>
+</div>
+
+<script>
+let currentUser = '';
+let currentScreen = 'loginScreen';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  currentScreen = id;
+}
+
+function login() {
+  const u = document.getElementById('username').value.trim();
+  if (!u) {
+    alert('Usuario requerido');
+    return;
+  }
+  currentUser = u;
+  showScreen('mainMenu');
+}
+
+function logout() {
+  if (confirm('¿Seguro que desea salir?')) {
+    currentUser = '';
+    showScreen('loginScreen');
+  }
+}
+
+document.getElementById('mainSearch').addEventListener('input', function(e) {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll('#mainMenuItems .menu-item').forEach(item => {
+    item.style.display = item.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+  });
+});
+</script>
+
+</body>
+</html>
